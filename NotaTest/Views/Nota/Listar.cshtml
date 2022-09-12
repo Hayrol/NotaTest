@@ -1,0 +1,60 @@
+﻿@model List<NotaModel>
+@{
+    ViewData["Title"] = "Listar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        Lista De Notas
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <form asp-controller="Nota" asp-action="Listar" method="get">
+                    <p>
+                        Buscar: <input type="text" name="buscar" class="form-text"/>
+                        <input type="submit" value="Buscar" class="btn btn-sm btn-dark"/>
+                    </p>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <a asp-action="Guardar" asp-controller="Nota" class="btn btn-outline-success"><i class="bi bi-plus-circle"></i>Crear Nuevo</a>
+            </div>
+        </div>  
+        <hr />
+        <table class="table table-primary table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-action="Listar" asp-route-sortOrder="@ViewData["TituloSortParm"]">Titulo</a>
+                    </th>
+                    <th>
+                        <a asp-action="Listar" asp-route-sortOrder="@ViewData["CuerpoSortParm"]">Cuerpo</a>
+                    </th>
+                    <th>
+                        <a asp-action="Listar" asp-route-sortOrder="@ViewData["FechaSortParm"]">Fecha</a>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>
+                        <td>@item.Titulo</td>
+                        <td>@item.Cuerpo</td>
+                        <td>@item.Fecha</td>
+                        <td>
+                            <a asp-action="Editar" asp-controller="Nota" class="btn btn-outline-primary btn-sm" asp-route-IdNota="@item.IdNota"><i class="bi bi-pencil-square"></i></a>
+                            <a asp-action="Eliminar" asp-controller="Nota" class="btn btn-outline-danger btn-sm" asp-route-IdNota="@item.IdNota"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+

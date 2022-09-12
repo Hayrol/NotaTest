@@ -1,0 +1,37 @@
+﻿@model NotaModel
+@{
+    ViewData["Title"] = "Guardar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        Crear Nota
+    </div>
+    <div class="card-body">
+        <form asp-action="Guardar" asp-controller="Nota" method="post">
+            <div class="mb-3">
+                <label class="form-label">Titulo</label>
+                <input asp-for="Titulo"  type="text" class="form-control">
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Cuerpo</label>
+                <textarea asp-for="Cuerpo" type="text" class="form-control"></textarea>
+                <span asp-validation-for="Cuerpo" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha</label>
+                <input asp-for="Fecha" type="date" class="form-control">
+                <span asp-validation-for="Fecha" class="text-danger"></span>
+            </div>
+
+            
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <a asp-action="Listar" asp-controller="Nota" class="btn btn-warning">Volver a la Lista</a>
+        </form>
+    </div>
+</div>
+
+
