@@ -19,7 +19,7 @@
                 </form>
             </div>
             <div class="col-md-6">
-                <a asp-action="Guardar" asp-controller="Nota" class="btn btn-outline-success"><i class="bi bi-plus-circle"></i>Crear Nuevo</a>
+                <a asp-action="Nota_Detalle" asp-controller="Nota" asp-route-idNota="0" class="btn btn-outline-success"><i class="bi bi-plus-circle"></i>Crear Nuevo</a>
             </div>
         </div>  
         <hr />
@@ -44,9 +44,12 @@
                     <tr>
                         <td>@item.Titulo</td>
                         <td>@item.Cuerpo</td>
-                        <td>@item.Fecha</td>
                         <td>
-                            <a asp-action="Editar" asp-controller="Nota" class="btn btn-outline-primary btn-sm" asp-route-IdNota="@item.IdNota"><i class="bi bi-pencil-square"></i></a>
+                            @item.Fecha.Value.ToShortDateString()
+ 
+                        </td>
+                        <td>
+                            <a asp-action="Nota_Detalle" asp-controller="Nota" class="btn btn-outline-primary btn-sm" asp-route-IdNota="@item.IdNota"><i class="bi bi-pencil-square"></i></a>
                             <a asp-action="Eliminar" asp-controller="Nota" class="btn btn-outline-danger btn-sm" asp-route-IdNota="@item.IdNota"><i class="bi bi-trash"></i></a>
                         </td>
                     </tr>

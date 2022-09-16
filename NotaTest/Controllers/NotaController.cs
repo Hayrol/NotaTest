@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NotaTest.Datos;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NotaTest.Models;
 
 namespace NotaTest.Controllers
 {
     public class NotaController : Controller
     {
-        NotaData _NotaData = new NotaData();
 
         private readonly DBTESTContext _context;
 
@@ -24,7 +23,8 @@ namespace NotaTest.Controllers
             ViewData["CuerpoSortParm"] = sortOrder == "cuerpo_asc" ? "cuerpo_desc" : "cuerpo_asc";
             ViewData["FechaSortParm"] = sortOrder == "fecha_asc" ? "fecha_desc" : "fecha_asc";
 
-            var notas = from s in _context.Nota select s;
+            var notas = from s in _context.Nota
+                        select s;
 
             switch (sortOrder)
             {
@@ -63,58 +63,54 @@ namespace NotaTest.Controllers
         }
 
         //metodo solo devuelve la vista para guardar
-        public IActionResult Guardar()
+        [HttpGet]
+        public IActionResult Nota_Detalle(int idNota)
         {
-            return View();
+            NotaModel notaModel = new NotaModel();
+
+            if(idNota != 0)
+            {
+                notaModel = _context.Nota.Find(idNota);
+            }
+
+            return View(notaModel);
         }
 
         //recibe el objeto para poder guardarlo en bd
         [HttpPost]
-        public IActionResult Guardar(NotaModel oNota)
+        public IActionResult Nota_Detalle(NotaModel oNota)
         {
 
             if (!ModelState.IsValid)
                 return View();
+            
+            
+            if(oNota.IdNota == 0)
+            {
 
-            var respuesta = _NotaData.Guardar(oNota);
+                _context.Nota.Add(oNota);
 
-            if (respuesta)
-                return RedirectToAction("Listar");
+            }
             else
-                return View();
+            {
+                _context.Nota.Update(oNota);
+            }
+
+            _context.SaveChanges();
+
+             return RedirectToAction("Listar", "Nota");
+   
 
         }
 
-        //metodo solo devuelve la vista
-        public IActionResult Editar(int IdNota)
-        {
-
-            var oNota = _NotaData.ObtenerPorId(IdNota);
-            return View(oNota);
-        }
-
-        [HttpPost]
-        //metodo recibe el objeto para editar
-        public IActionResult Editar(NotaModel oNota)
-        {
-
-            if (!ModelState.IsValid)
-                return View();
-
-            var respuesta = _NotaData.Editar(oNota);
-
-            if (respuesta)
-                return RedirectToAction("Listar");
-            else
-                return View();
-        }
 
         //metodo recibe el objeto seleccionado para la vista
+        [HttpGet]
         public IActionResult Eliminar(int IdNota)
         {
 
-            var oNota = _NotaData.ObtenerPorId(IdNota);
-            return View(oNota);
+            NotaModel notaModel = _context.Nota.Where(x => x.IdNota == IdNota).FirstOrDefault();
+            return View(notaModel);
         }
 
         [HttpPost]
@@ -122,12 +118,11 @@ namespace NotaTest.Controllers
         public IActionResult Eliminar(NotaModel oNota)
         {
 
-            var respuesta = _NotaData.Eliminar(oNota.IdNota);
+            _context.Nota.Remove(oNota);
 
-            if (respuesta)
-                return RedirectToAction("Listar");
-            else
-                return View();
+            _context.SaveChanges();
+
+            return RedirectToAction("Listar", "Nota");
         }
     }
 }

@@ -1,15 +1,28 @@
-﻿@model NotaModel
+﻿@model NotaTest.Models.NotaModel
 @{
     ViewData["Title"] = "Guardar";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+
+
 <div class="card">
     <div class="card-header">
-        Crear Nota
+        @if (Model.IdNota == 0)
+        {
+            <h1>Crear Nota</h1>
+        }
+        else
+        {
+            <h1>Editar Nota</h1>
+        }
     </div>
     <div class="card-body">
-        <form asp-action="Guardar" asp-controller="Nota" method="post">
+        <form asp-action="Nota_Detalle" asp-controller="Nota" method="post">
+            <input type="hidden" asp-for="IdNota"/>
+
+
             <div class="mb-3">
                 <label class="form-label">Titulo</label>
                 <input asp-for="Titulo"  type="text" class="form-control">
@@ -27,8 +40,13 @@
                 <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
 
+            @if (Model.IdNota == 0){
+                <button type="submit" class="btn btn-primary">Crear</button>
+            }else{
+                <button type="submit" class="btn btn-success">Actualizar</button>
+            }
             
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            
             <a asp-action="Listar" asp-controller="Nota" class="btn btn-warning">Volver a la Lista</a>
         </form>
     </div>

@@ -13,11 +13,17 @@ builder.Services.AddDbContext<DBTESTContext>(options => options.UseSqlServer(bui
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.UseExceptionHandler("/Home/Error");
+    var context  = scope.ServiceProvider.GetRequiredService<DBTESTContext>();
+    context.Database.Migrate();
 }
+
+    // Configure the HTTP request pipeline.
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Home/Error");
+    }
 app.UseStaticFiles();
 
 app.UseRouting();
